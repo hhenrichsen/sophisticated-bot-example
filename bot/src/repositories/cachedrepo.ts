@@ -15,6 +15,10 @@ export abstract class CachedRepo<T extends ObjectLiteral> {
         });
     }
 
+    protected async updateCache(id: string, value: T) {
+        this.cache.set(id, value);
+    }
+
     protected async findOneCached(
         id: string,
         options: FindOneOptions<T>
