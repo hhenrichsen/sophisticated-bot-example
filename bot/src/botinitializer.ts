@@ -8,7 +8,6 @@ import { DataSourceFactory } from './service/datasourcefactory';
 export class BotInitializer {
     constructor(
         private readonly dataSourceFactory: DataSourceFactory,
-        private readonly bot: Bot,
         private readonly logger: Logger
     ) {}
 
@@ -19,8 +18,9 @@ export class BotInitializer {
         Container.set(DataSource, dataSource);
         this.logger.info('Connected!');
 
+        const bot = Container.get(Bot);
         this.logger.info('Connected to Discord...');
-        this.bot.login();
+        bot.login();
         this.logger.info('Connected!');
     }
 }
