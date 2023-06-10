@@ -3,6 +3,8 @@ import { Client, REST, Routes } from 'discord.js';
 import { Service } from 'typedi';
 import { CommandHandler } from './command/commandhandler';
 import { CommandRegistry } from './command/commandregistry';
+import { ReactHandler } from './reaction/reacthandler';
+import { unpartial } from '../util/unpartial';
 import { InteractionHandler } from './interaction/interactionhandler';
 
 const { BOT_TOKEN, BOT_CLIENT_ID } = process.env;
@@ -17,6 +19,7 @@ export class Bot {
         private readonly logger: Logger,
         private readonly commandRegistry: CommandRegistry,
         private readonly commandHandler: CommandHandler,
+        private readonly reactHandler: ReactHandler,
         private readonly interactionHandler: InteractionHandler
     ) {
         if (!BOT_TOKEN) {
@@ -67,5 +70,14 @@ export class Bot {
                 this.interactionHandler.handle(interaction);
             }
         });
+
+        this.client.on(
+            'messageReactionAdd',
+            async (possibleReaction, possibleUser) => {
+                const reaction = await unpartial(possibleReaction);
+                const user = await unpartial(possibleUser);
+                this.reactHandler.handle(reaction, user);
+            }
+        );
     }
 }
