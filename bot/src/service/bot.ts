@@ -1,5 +1,5 @@
 import Logger from 'bunyan';
-import { Client, REST, Routes } from 'discord.js';
+import { Client, GatewayIntentBits, Partials, REST, Routes } from 'discord.js';
 import { Service } from 'typedi';
 import { CommandHandler } from './command/commandhandler';
 import { CommandRegistry } from './command/commandregistry';
@@ -30,7 +30,18 @@ export class Bot {
         this.token = BOT_TOKEN;
 
         this.client = new Client({
-            intents: [],
+            intents: [
+                GatewayIntentBits.DirectMessages,
+                GatewayIntentBits.Guilds,
+                GatewayIntentBits.GuildMessages,
+                GatewayIntentBits.GuildMessageReactions,
+            ],
+            partials: [
+                Partials.Message,
+                Partials.User,
+                Partials.Reaction,
+                Partials.Channel,
+            ],
         });
 
         this.rest = new REST({ version: '10' });
