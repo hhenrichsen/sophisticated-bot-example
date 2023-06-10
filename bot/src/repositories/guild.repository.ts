@@ -1,16 +1,16 @@
 import { Service } from 'typedi';
 import { DataSource } from 'typeorm';
 import { Guild } from '../entities/guild.entity';
+import { Environment } from '../service/environment';
+import { CachedRepo } from './cachedrepo';
 
 @Service()
-export class GuildRepository {
-    private repo;
-
-    constructor(dataSource: DataSource) {
-        this.repo = dataSource.getRepository(Guild);
+export class GuildRepository extends CachedRepo<Guild> {
+    constructor(environment: Environment, dataSource: DataSource) {
+        super(environment, dataSource.getRepository(Guild));
     }
 
     public async getGuildById(id: string): Promise<Guild | undefined> {
-        return (await this.repo.findOne({ where: { id } })) ?? undefined;
+        return this.findOneCached(id, { where: { id } });
     }
 }
