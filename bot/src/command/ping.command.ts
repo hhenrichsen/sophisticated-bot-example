@@ -1,11 +1,6 @@
-import {
-    CacheType,
-    Interaction,
-    RESTPostAPIApplicationCommandsJSONBody,
-    SlashCommandBuilder,
-} from 'discord.js';
+import { CacheType, Interaction, SlashCommandBuilder } from 'discord.js';
 import { Service } from 'typedi';
-import { Command } from './base';
+import { Command } from './command';
 
 @Service()
 export class PingCommand extends Command {

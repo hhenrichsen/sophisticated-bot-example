@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { Command } from '../../command/base';
+import { Command } from '../../command/command';
 import { PingCommand } from '../../command/ping.command';
 
 @Service()
