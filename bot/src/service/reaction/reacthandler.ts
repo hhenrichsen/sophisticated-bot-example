@@ -17,7 +17,7 @@ export class ReactHandler {
         }
         const guild =
             (reaction.message.guildId &&
-                (await this.guildRepo.getGuildById(
+                (await this.guildRepo.createOrGetGuild(
                     reaction.message.guildId
                 ))) ||
             undefined;

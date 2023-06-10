@@ -13,4 +13,19 @@ export class GuildRepository extends CachedRepo<Guild> {
     public async getGuildById(id: string): Promise<Guild | undefined> {
         return this.findOneCached(id, { where: { id } });
     }
+
+    public async createOrGetGuild(id: string): Promise<Guild> {
+        const old = await this.getGuildById(id);
+        if (old) {
+            return old;
+        }
+        const guild = await this.repo.create({ id });
+        this.updateCache(id, guild);
+        return guild;
+    }
+
+    public saveGuild(id: string, guild: Guild): void {
+        this.updateCache(id, guild);
+        this.repo.update(id, guild);
+    }
 }

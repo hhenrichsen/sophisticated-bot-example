@@ -16,7 +16,7 @@ export class CommandHandler {
         this.logger.debug(`Handling command ${interaction.commandName}`);
         const guild =
             (interaction.guildId &&
-                (await this.guildRepo.getGuildById(interaction.guildId))) ||
+                (await this.guildRepo.createOrGetGuild(interaction.guildId))) ||
             undefined;
         const command = this.commandRegistry.getCommand(
             interaction.commandName
