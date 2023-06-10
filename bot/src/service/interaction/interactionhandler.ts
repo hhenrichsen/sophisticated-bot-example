@@ -1,13 +1,15 @@
-import { ButtonInteraction, CacheType, Interaction } from 'discord.js';
+import { ButtonInteraction, CacheType, Client, Interaction } from 'discord.js';
+import { DeleteResponse } from '../../interactionresponse/deleteresponse';
 import { InteractionResponse } from '../../interactionresponse/interactionresponse';
 import { ButtonCustomId } from '../../interactionresponse/interactionid';
 import { Service } from 'typedi';
+import Logger from 'bunyan';
 
 @Service()
 export class InteractionHandler {
     private readonly buttonResponses: Map<ButtonCustomId, InteractionResponse>;
 
-    constructor() {
+    constructor(private readonly logger: Logger) {
         const buttonResponses: InteractionResponse<
             ButtonInteraction<CacheType>
         >[] = [];
@@ -16,19 +18,19 @@ export class InteractionHandler {
         );
     }
 
-    public handle(interaction: Interaction<CacheType>) {
+    public handle(client: Client, interaction: Interaction<CacheType>) {
         if (interaction.isButton()) {
-            if (
-                interaction.customId &&
-                interaction.customId in ButtonCustomId
-            ) {
+            if (interaction.customId) {
                 const response = this.buttonResponses.get(
                     interaction.customId as ButtonCustomId
                 );
                 if (!response) {
+                    this.logger.warn(
+                        `No response available for ${interaction.customId}`
+                    );
                     return;
                 }
-                response.run(interaction);
+                response.run(client, interaction);
             }
         }
     }

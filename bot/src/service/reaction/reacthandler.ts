@@ -1,4 +1,4 @@
-import { MessageReaction, User } from 'discord.js';
+import { Client, MessageReaction, User } from 'discord.js';
 import { Service } from 'typedi';
 import { ReactionResponse } from '../../reaction/reaction';
 import { GuildRepository } from '../../repositories/guild.repository';
@@ -11,7 +11,7 @@ export class ReactHandler {
         this.reactions = [];
     }
 
-    public async handle(reaction: MessageReaction, user: User) {
+    public async handle(client: Client, reaction: MessageReaction, user: User) {
         if (user.bot) {
             return;
         }
@@ -22,8 +22,8 @@ export class ReactHandler {
                 ))) ||
             undefined;
         for (const response of this.reactions) {
-            if (await response.shouldHandle(reaction, user, guild)) {
-                return response.run(reaction, user, guild);
+            if (await response.shouldHandle(client, reaction, user, guild)) {
+                return response.run(client, reaction, user, guild);
             }
         }
     }

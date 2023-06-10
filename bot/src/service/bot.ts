@@ -78,7 +78,7 @@ export class Bot {
             if (interaction.isChatInputCommand()) {
                 this.commandHandler.handle(interaction);
             } else {
-                this.interactionHandler.handle(interaction);
+                this.interactionHandler.handle(this.client, interaction);
             }
         });
 
@@ -87,7 +87,7 @@ export class Bot {
             async (possibleReaction, possibleUser) => {
                 const reaction = await unpartial(possibleReaction);
                 const user = await unpartial(possibleUser);
-                this.reactHandler.handle(reaction, user);
+                this.reactHandler.handle(this.client, reaction, user);
             }
         );
     }
