@@ -6,7 +6,7 @@ config();
 const { MIGRATE_DATABASE_URL } = process.env;
 
 const dataSource = new DataSource({
-    type: 'mysql',
+    type: 'postgres',
     url: MIGRATE_DATABASE_URL,
     entities: [
         // We use the injector to accomplish this in the app, but need this

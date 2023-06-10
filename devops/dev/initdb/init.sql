@@ -1,0 +1,2 @@
+CREATE DATABASE bot;
+CREATE DATABASE migrate;

@@ -7,17 +7,17 @@ services:
     ports:
       - 8080:8080
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: password
     links:
       - db:db
 
   db:
-    image: 'mysql:8.0.30'
+    image: 'postgres:11'
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: password
     volumes:
-      - ../data/prod/db:/var/lib/mysql
-      - ../initdb:/docker-entrypoint-initdb.d:ro
+      - ../data/prod/db:/var/lib/postgresql
+      - ./prod/initdb:/docker-entrypoint-initdb.d:ro
 
   migrator:
     build:
@@ -27,8 +27,8 @@ services:
     depends_on:
       - db
     environment:
-      DATABASE_URL: mysql://root:password@db:3306/bot
-      MIGRATE_DATABASE_URL: mysql://root:password@db:3306/bot
+      DATABASE_URL: postgres://postgres:password@db:5432/bot
+      MIGRATE_DATABASE_URL: postgres://postgres:password@db:5432/bot
 
   bot:
     build:
@@ -40,5 +40,5 @@ services:
     env_file:
       - ../.env
     environment:
-      DATABASE_URL: mysql://root:password@db:3306/bot
-      MIGRATE_DATABASE_URL: mysql://root:password@db:3307/bot
+      DATABASE_URL: postgres://postgres:password@db:5432/bot
+      MIGRATE_DATABASE_URL: postgres://postgres:password@db:3307/bot

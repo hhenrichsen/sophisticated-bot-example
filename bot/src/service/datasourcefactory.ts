@@ -17,7 +17,7 @@ export class DataSourceFactory {
         this.logger.info(`Registerred ${entities.length} entities.`);
 
         return new DataSource({
-            type: 'mysql',
+            type: 'postgres',
             url: DATABASE_URL,
             entities,
             migrationsTableName: '_migrations',

@@ -7,26 +7,17 @@ services:
     ports:
       - 8080:8080
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: password
     links:
       - db:db
-      - migrate-db:migrate-db
 
   db:
-    image: 'mysql:8.0.30'
+    image: 'postgres:11'
     environment:
-      MYSQL_ROOT_PASSWORD: password
+      POSTGRES_PASSWORD: password
     volumes:
-      - ../data/dev/db:/var/lib/mysql
-      - ../initdb:/docker-entrypoint-initdb.d:ro
-
-  migrate-db:
-    image: 'mysql:8.0.30'
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-    volumes:
-      - ../data/dev-migrations/db:/var/lib/mysql
-      - ../initdb:/docker-entrypoint-initdb.d:ro
+      - ../data/dev/db:/var/lib/postgresql
+      - ./dev/initdb:/docker-entrypoint-initdb.d:ro
 
   migrator:
     build:
@@ -36,10 +27,10 @@ services:
       - ../bot:/app
     command: npx nodemon --legacy-watch --watch src/migrations -e ts --exec "npm run migrate" --polling-interval 5000
     depends_on:
-      - migrate-db
+      - db
     environment:
-      DATABASE_URL: mysql://root:password@migrate-db:3306/bot
-      MIGRATE_DATABASE_URL: mysql://root:password@migrate-db:3306/bot
+      DATABASE_URL: mysql://postgres:password@db:5432/migrate
+      MIGRATE_DATABASE_URL: mysql://postgres:password@db:5432/migrate
 
   bot:
     build:
@@ -51,10 +42,9 @@ services:
     command: npm run dev
     depends_on:
       - db
-      - migrate-db
       - migrator
     env_file:
       - ../.env
     environment:
-      DATABASE_URL: mysql://root:password@db:3306/bot
-      MIGRATE_DATABASE_URL: mysql://root:password@migrate-db:3306/bot
+      DATABASE_URL: mysql://postgres:password@db:5432/bot
+      MIGRATE_DATABASE_URL: mysql://postgres:password@db:5432/migrate
