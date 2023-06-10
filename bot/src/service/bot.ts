@@ -3,6 +3,7 @@ import { Client, REST, Routes } from 'discord.js';
 import { Service } from 'typedi';
 import { CommandHandler } from './command/commandhandler';
 import { CommandRegistry } from './command/commandregistry';
+import { InteractionHandler } from './interaction/interactionhandler';
 
 const { BOT_TOKEN, BOT_CLIENT_ID } = process.env;
 
@@ -15,7 +16,8 @@ export class Bot {
     constructor(
         private readonly logger: Logger,
         private readonly commandRegistry: CommandRegistry,
-        private readonly commandHandler: CommandHandler
+        private readonly commandHandler: CommandHandler,
+        private readonly interactionHandler: InteractionHandler
     ) {
         if (!BOT_TOKEN) {
             throw new Error(
@@ -61,6 +63,8 @@ export class Bot {
         this.client.on('interactionCreate', (interaction) => {
             if (interaction.isChatInputCommand()) {
                 this.commandHandler.handle(interaction);
+            } else {
+                this.interactionHandler.handle(interaction);
             }
         });
     }
