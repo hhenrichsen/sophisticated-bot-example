@@ -9,10 +9,13 @@ import Logger from 'bunyan';
 export class InteractionHandler {
     private readonly buttonResponses: Map<ButtonCustomId, InteractionResponse>;
 
-    constructor(private readonly logger: Logger) {
+    constructor(
+        private readonly logger: Logger,
+        deleteResponse: DeleteResponse
+    ) {
         const buttonResponses: InteractionResponse<
             ButtonInteraction<CacheType>
-        >[] = [];
+        >[] = [deleteResponse];
         this.buttonResponses = new Map(
             buttonResponses.map((response) => [response.respondTo, response])
         );
