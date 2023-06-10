@@ -20,8 +20,8 @@
     "dotenv": "^16.0.1",
     "glob": "^8.0.3",
     "mysql2": "^2.3.3",
+    "node-cache": "^5.1.2",
     "reflect-metadata": "^0.1.13",
-    "timed-cache": "^2.0.0",
     "typedi": "^0.10.0",
     "typeorm": "^0.3.7"
   },
@@ -29,7 +29,6 @@
     "@sentry/types": "^7.54.0",
     "@types/bunyan": "^1.8.8",
     "@types/node": "^18.6.3",
-    "@types/timed-cache": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "eslint": "^8.21.0",
